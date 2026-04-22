@@ -1,12 +1,6 @@
-# ExamAnalyzer Pro ⚡
+# ExamAnalyzer Pro
 
 > MHT-CET response sheet analyzer — instant performance dashboard, in your browser, with zero data uploads.
-
-![HTML](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
-![CSS](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
-![No Backend](https://img.shields.io/badge/Backend-None-00ff88?style=flat)
-![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local-00ff88?style=flat)
 
 ---
 
@@ -27,13 +21,13 @@ Everything runs **inside your browser**. No server. No backend. No account. Your
 
 ## Live Demo
 
-🔗 **[mhtcetmarkscalculator.netlify.app](https://mhtcetmarkscalculator.netlify.app)**
+**[mhtcetmarkscalculator.netlify.app](https://mhtcetmarkscalculator.netlify.app)**
 
 ---
 
 ## Features
 
-### 📊 Dashboard & Analytics
+### Dashboard & Analytics
 - **Total Score** with marks breakdown (e.g. 142 / 200)
 - **Accuracy %** based on attempted questions only
 - **Correct / Incorrect / Unattempted** counts with tooltips
@@ -41,41 +35,41 @@ Everything runs **inside your browser**. No server. No backend. No account. Your
 - **Sectional Bar Chart** — subject-wise score bars (Physics, Chemistry, Math/Bio)
 - **Per-subject Accuracy Pie Charts** — individual donut charts for each subject
 
-### 🔍 Question Viewer
+### Question Viewer
 - Browse every question one by one
 - See **your answer vs the correct answer** side by side
 - Question images rendered directly from the PDF (when PDF is uploaded)
-- Click any image to open it in a **fullscreen lightbox**
+- Click any image to open it in a fullscreen lightbox
 - Keyboard navigation: `←` / `→` arrow keys
 - Filter questions by: **All / Correct / Incorrect / Unattempted**
 - Click any question in the sidebar grid to jump directly to it
 
-### 📤 Export Options
+### Export Options
 - **PDF Report** — styled A4 report with score box, stats, and sectional table (via jsPDF)
 - **CSV Export** — all questions with section, status, correct/candidate option IDs, and marks
-- **Share Card** — a 600×330px PNG score card, perfect for sharing on WhatsApp/Instagram (via html2canvas)
+- **Share Card** — a 600x330px PNG score card, perfect for sharing on WhatsApp/Instagram (via html2canvas)
 
-### 🎨 UI / Visual
+### UI / Visual
 - **Cyberpunk / Glitch** design system — neon green, magenta, cyan on void black
 - **CRT scanline overlay** — retro terminal aesthetic
-- **Chamfered corners** — 45° cut geometry on all cards and buttons
+- **Chamfered corners** — 45 degree cut geometry on all cards and buttons
 - **Glitch animation** on the brand title (chromatic aberration effect)
 - **MATRIX / GHOST** theme toggle — neon green vs deep cyan palette
 - Smooth hover glows, neon box-shadows, HUD corner brackets
 - Fully **responsive** — works on mobile and desktop
 
-### 📱 Mobile Support
+### Mobile Support
 - Slide-out sidebar drawer (hamburger menu)
 - Responsive grid layouts for all screens
 - Export buttons hidden on mobile to keep the topbar clean
 
-### 💾 Session Persistence
+### Session Persistence
 - Your last session is saved to `localStorage`
 - On next visit, a **restore banner** lets you reload your previous results instantly
 - Sessions expire after 7 days automatically
 
-### 🎉 Confetti
-- If your score is **≥ 150**, a confetti burst fires automatically — because you earned it
+### Confetti
+- If your score is **150 or above**, a confetti burst fires automatically
 
 ---
 
@@ -96,7 +90,7 @@ Everything runs **inside your browser**. No server. No backend. No account. Your
 ### Online (Netlify)
 1. Visit the live link above
 2. Select your stream: **PCM** (Phy · Chem · Math) or **PCB** (Phy · Chem · Bio)
-3. Drag & drop or click to upload your response sheet file
+3. Drag and drop or click to upload your response sheet file
 4. Wait a few seconds while it parses and renders
 5. Explore your dashboard
 
@@ -105,7 +99,7 @@ Everything runs **inside your browser**. No server. No backend. No account. Your
 2. Open `index.html` in **Google Chrome**
 3. That's it — no server, no install
 
-> ⚠️ Chrome is recommended. Some browsers restrict local file access for PDF.js rendering.
+> Note: Chrome is recommended. Some browsers restrict local file access for PDF.js rendering.
 
 ---
 
@@ -164,7 +158,7 @@ No npm. No build tools. No framework. Pure HTML + CSS + JS.
 |--------|---------|-------------------|
 | PCM | Physics | +1 |
 | PCM | Chemistry | +1 |
-| PCM | Mathematics | **+2** |
+| PCM | Mathematics | +2 |
 | PCB | Physics | +1 |
 | PCB | Chemistry | +1 |
 | PCB | Biology | +1 |
@@ -175,11 +169,11 @@ Incorrect and unattempted questions carry **0 marks** (no negative marking).
 
 ## Privacy
 
-- ✅ 100% client-side — all processing happens in your browser
-- ✅ No file is ever uploaded to any server
-- ✅ No analytics, no tracking
-- ✅ No account required
-- ✅ Works fully offline after the page loads
+- 100% client-side — all processing happens in your browser
+- No file is ever uploaded to any server
+- No analytics, no tracking
+- No account required
+- Works fully offline after the page loads
 
 ---
 
@@ -207,4 +201,4 @@ Walchand College of Engineering, Sangli
 
 ## License
 
-This project is open source and free to use. If you find it helpful, consider giving it a ⭐ on GitHub!
+This project is open source and free to use. If you find it helpful, consider giving it a star on GitHub.
