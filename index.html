@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExamAnalyzer Pro</title>
+  <meta name="description" content="Upload your MHT-CET response sheet PDF to instantly analyze your performance.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <!-- App stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     RESTORE SESSION BANNER (fixed top)
+═══════════════════════════════════════════════════════ -->
+<div id="restoreBanner" style="display:none">
+  <span class="restore-tag">⟳ Session Found</span>
+  <span class="restore-info" id="restoreBannerInfo"></span>
+  <div class="restore-btns">
+    <button class="btn-ghost" style="font-size:10px;padding:.4rem .9rem" onclick="restoreStoredSession()">Restore →</button>
+    <button class="btn-ghost" style="font-size:10px;padding:.4rem .9rem;border-color:rgba(244,63,94,.3);color:#f43f5e" onclick="dismissRestoreBanner()">✕</button>
+  </div>
+</div>
+
+<!-- Upload-screen floating theme button -->
+<button id="uploadThemeBtn" class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme">☀</button>
+
+<!-- ═══════════════════════════════════════════════════════
+     UPLOAD SCREEN
+═══════════════════════════════════════════════════════ -->
+<div id="uploadScreen" class="upload-screen">
+  <div class="upload-container">
+
+    <!-- LEFT: brand + mode selector + upload zone -->
+    <div class="upload-left">
+      <div>
+        <div class="brand-title">ExamAnalyzer Pro</div>
+        <div class="deco-rule"><span>MHT-CET</span></div>
+        <div class="brand-sub">Upload your MHT-CET Objection Portal response sheet (.html, .pdf, or .txt) to generate an instant analysis dashboard.</div>
+      </div>
+
+      <div class="mode-selector">
+        <div class="mode-selector-label">Select Your Exam Stream</div>
+        <div class="mode-btns">
+          <button class="mode-btn active" id="btnPCM" onclick="setMode('PCM')">
+            <span class="mode-btn-title">PCM</span>
+            <span class="mode-btn-sub">Phy &middot; Chem &middot; Math</span>
+          </button>
+          <button class="mode-btn" id="btnPCB" onclick="setMode('PCB')">
+            <span class="mode-btn-title">PCB</span>
+            <span class="mode-btn-sub">Phy &middot; Chem &middot; Bio</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <svg class="upload-icon" viewBox="0 0 52 52" fill="none">
+          <rect x="9" y="4" width="34" height="44" stroke="currentColor" stroke-width="2"/>
+          <path d="M17 18h18M17 25h18M17 32h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M33 4v11h9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="upload-title" id="dropTitle">Drop your response sheet here</div>
+        <div class="upload-sub">Supports the MHT-CET Objection Tracker Portal HTML/PDF response sheet.<br>All processing is local &mdash; your data never leaves your device.</div>
+        <button class="btn-primary" onclick="event.stopPropagation();document.getElementById('fileInput').click()">Browse File</button>
+        <div class="drag-preview" id="dragPreview"></div>
+        <input type="file" id="fileInput" accept=".pdf,.html,.htm,.txt" style="display:none" onchange="handleFile(this)">
+      </div>
+    </div>
+
+    <!-- RIGHT: about / credit panel -->
+    <div class="upload-right">
+      <div class="about-avatar"><span>SJ</span></div>
+      <div>
+        <div class="about-built">Built by</div>
+        <div class="about-name">Swanand Jaju</div>
+        <div class="about-role">First Year · AIML</div>
+        <div class="about-college">Walchand College of Engineering, Sangli</div>
+      </div>
+      <div class="deco-rule" style="width:100%"><span>Connect</span></div>
+      <div class="about-links">
+        <a href="https://github.com/swanandjaju" target="_blank" class="about-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/swanand-jaju/" target="_blank" class="about-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+      <div class="about-note">Built this tool to help MHT-CET students instantly analyze their response sheet — fully local, no data uploaded.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MISMATCH POPUP
+═══════════════════════════════════════════════════════ -->
+<div class="mismatch-overlay" id="mismatchOverlay">
+  <div class="mismatch-box">
+    <span class="mismatch-icon">⚠</span>
+    <div class="mismatch-title">Stream Mismatch Detected</div>
+    <p class="mismatch-msg" id="mismatchMsg"></p>
+    <div class="mismatch-badge" id="mismatchBadge"></div>
+    <div class="mismatch-btns">
+      <button class="btn-primary" id="mismatchSwitchBtn" onclick="mismatchSwitchAndContinue()">Switch &amp; Continue</button>
+      <button class="btn-ghost" onclick="mismatchReupload()">Re-upload</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     LOADING SCREEN
+═══════════════════════════════════════════════════════ -->
+<div class="loading-overlay" id="loadingScreen" style="display:none">
+  <div class="spinner"></div>
+  <div style="text-align:center">
+    <div class="step-label" id="stepLabel">Initializing</div>
+    <div class="step-sub"   id="stepSub">Please wait</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     DASHBOARD
+═══════════════════════════════════════════════════════ -->
+<div class="dashboard" id="dashboard">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <!-- Hamburger: mobile only -->
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Toggle sidebar" style="display:none">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-brand">ExamAnalyzer Pro</div>
+      <div class="topbar-file" id="topbarFile"></div>
+      <span class="topbar-mode" id="topbarMode"></span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-icon export-btn" onclick="exportCSV()" title="Export CSV" id="csvBtn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        CSV
+      </button>
+      <button class="btn-icon export-btn" onclick="exportPDF()" title="Export PDF" id="pdfBtn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        PDF
+      </button>
+      <button class="btn-icon export-btn" onclick="generateShareCard()" title="Share score card" id="shareBtn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="btn-ghost" onclick="resetApp()">↑ Upload New</button>
+      <button class="theme-toggle-btn" id="dashThemeBtn" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
+    </div>
+  </div>
+
+  <!-- Main layout: sidebar + content -->
+  <div class="main-layout">
+
+    <!-- Sidebar: question grid -->
+    <div class="sidebar" id="mainSidebar">
+      <div class="sidebar-inner" id="gridContainer"></div>
+    </div>
+
+    <!-- Content area -->
+    <div class="content">
+      <div class="content-inner">
+
+        <!-- Metric cards -->
+        <div class="metrics-grid" id="metricsGrid"></div>
+
+        <!-- Main chart grid: donut + bar -->
+        <div class="chart-grid">
+          <div class="chart-card">
+            <div class="chart-title">Accuracy Breakdown</div>
+            <div class="donut-wrap">
+              <canvas id="donutChart"></canvas>
+              <div class="donut-center">
+                <div class="donut-pct" id="donutPct">—</div>
+                <div class="donut-sub">accuracy</div>
+              </div>
+            </div>
+            <div id="donutLegend" style="display:flex;gap:1.25rem;justify-content:center;margin-top:1.1rem;font-size:11px;color:var(--text2);font-weight:500;letter-spacing:.06em"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Sectional Performance</div>
+            <div id="subjectBars" style="padding-top:.5rem"></div>
+          </div>
+        </div>
+
+        <!-- Subject-wise accuracy pie charts (one per subject) -->
+        <div class="subject-charts-grid" id="subjectChartsGrid"></div>
+
+        <!-- Filter bar -->
+        <div class="filter-bar" id="filterBar">
+          <button class="btn-ghost active" data-filter="all"         onclick="setFilter('all',this)">All (0)</button>
+          <button class="btn-ghost"        data-filter="correct"     onclick="setFilter('correct',this)">Correct</button>
+          <button class="btn-ghost"        data-filter="incorrect"   onclick="setFilter('incorrect',this)">Incorrect</button>
+          <button class="btn-ghost"        data-filter="unattempted" onclick="setFilter('unattempted',this)">Unattempted</button>
+        </div>
+
+        <!-- Question viewer -->
+        <div class="q-viewer" id="qViewer">
+          <div class="q-header">
+            <span class="q-num"   id="qNum">—</span>
+            <span class="q-badge badge-unattempted" id="qBadge"></span>
+            <span class="marks-pill marks-zero"     id="marksPill"></span>
+          </div>
+          <div class="q-img-area" id="qImgArea">
+            <div class="q-img-placeholder">Upload a response sheet to see question previews</div>
+          </div>
+          <div class="q-ans-row">
+            <div class="ans-cell">
+              <div class="ans-icon is" id="selIcon"><span>—</span></div>
+              <div class="ans-detail">
+                <span class="ans-lbl">Candidate's Answer</span>
+                <span class="ans-val vs" id="badgeSelected">Not Answered</span>
+              </div>
+            </div>
+            <div class="ans-cell">
+              <div class="ans-icon ia" id="corIcon"><span>✓</span></div>
+              <div class="ans-detail">
+                <span class="ans-lbl">Correct Answer</span>
+                <span class="ans-val va" id="badgeCorrect">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="q-footer">
+            <div class="nav-btns">
+              <button class="btn-ghost" onclick="prevQ()">← Prev</button>
+              <button class="btn-ghost" onclick="nextQ()">Next →</button>
+            </div>
+            <span style="font-size:11px;color:var(--pewter);font-weight:600;letter-spacing:.1em" id="qOf"></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SIDEBAR OVERLAY (mobile drawer backdrop)
+═══════════════════════════════════════════════════════ -->
+<div id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     LIGHTBOX
+═══════════════════════════════════════════════════════ -->
+<div id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close lightbox">✕</button>
+  <img id="lightboxImg" src="" alt="Question preview">
+  <div class="lightbox-hint">Click anywhere or press Esc to close</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SHARE CARD (off-screen, captured by html2canvas)
+═══════════════════════════════════════════════════════ -->
+<div id="shareCardEl">
+  <!-- Circuit grid pattern -->
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,136,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.05) 1px,transparent 1px);background-size:28px 28px"></div>
+  <!-- Neon corner brackets -->
+  <div style="position:absolute;top:14px;left:14px;width:20px;height:20px;border-top:2px solid #00ff88;border-left:2px solid #00ff88"></div>
+  <div style="position:absolute;top:14px;right:14px;width:20px;height:20px;border-top:2px solid #00ff88;border-right:2px solid #00ff88"></div>
+  <div style="position:absolute;bottom:14px;left:14px;width:20px;height:20px;border-bottom:2px solid #00ff88;border-left:2px solid #00ff88"></div>
+  <div style="position:absolute;bottom:14px;right:14px;width:20px;height:20px;border-bottom:2px solid #00ff88;border-right:2px solid #00ff88"></div>
+  <!-- Neon top stripe -->
+  <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#00ff88,transparent)"></div>
+  <!-- Card content -->
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:36px 40px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#6b7280;font-weight:700">MHT-CET &nbsp;<span id="scMode" style="color:#00ff88"></span>&nbsp; · EXAMANALYZER PRO</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:4px">
+      <div style="font-family:'Orbitron',monospace;font-size:70px;color:#00ff88;line-height:1;letter-spacing:.02em" id="scScore">—</div>
+      <div style="font-family:'Orbitron',monospace;font-size:26px;color:#2a2a3a;letter-spacing:.02em">/ <span id="scMax" style="color:#2a2a3a">200</span></div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#6b7280;margin-top:-4px">Total Score</div>
+    <div style="width:60%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,136,.5),transparent);margin:4px 0"></div>
+    <div style="display:flex;gap:28px;font-size:11px;letter-spacing:.08em;margin-top:2px;font-family:'JetBrains Mono',monospace">
+      <span style="color:#00ff88;font-weight:700">✓ <span id="scCorrect">0</span> Correct</span>
+      <span style="color:#ff3366;font-weight:700">✗ <span id="scIncorrect">0</span> Wrong</span>
+      <span style="color:#00d4ff;font-weight:700"><span id="scAccuracy">0%</span> Acc.</span>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#6b7280;letter-spacing:.06em;margin-top:2px" id="scSubjects"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#2a2a3a;letter-spacing:.14em;text-transform:uppercase;margin-top:4px" id="scDate"></div>
+  </div>
+  <!-- Bottom watermark -->
+  <div style="position:absolute;bottom:10px;left:0;right:0;text-align:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:#1c1c2e;letter-spacing:.2em;text-transform:uppercase">examanalyzer pro · by swanand jaju · wce sangli</div>
+</div>
+
+<!-- ════════════════ CDN LIBRARIES ════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- App logic -->
+<script src="script.js"></script>
+</body>
+</html>
